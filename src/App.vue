@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style>
-@import './index.css';
+@import "./index.css";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
