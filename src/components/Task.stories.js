@@ -1,60 +1,43 @@
-import { action } from "@storybook/addon-actions";
 import Task from "./Task";
+
 export default {
   title: "Task",
   // Our exports that end in "Data" are not stories.
-  excludeStories: /.*Data$/
-};
-export const actionsData = {
-  onPinTask: action("onPinTask"),
-  onArchiveTask: action("onArchiveTask")
-};
-
-export const taskData = {
-  id: "1",
-  title: "Test Task",
-  state: "Task_INBOX",
-  updated_at: new Date(2019, 0, 1, 9, 0)
+  excludeStories: /.*Data$/,
+  argTypes: {
+    onPinTask: {action: "onPinTask"},
+    onArchiveTask: {action: "onArchiveTask"}
+  }
 };
 
-const taskTemplate = `<task :task="task" @archiveTask="onArchiveTask" @pinTask="onPinTask"/>`;
+const Template = (args, {argTypes}) => ({
+  props: Object.keys(argTypes),
+  components: {Task},
+  template:
+      '<task :task="task" @archiveTask="onArchiveTask" @pinTask="onPinTask" />'
+});
 
 // default task state
-export const Default = () => ({
-  components: { Task },
-  template: taskTemplate,
-  props: {
-    task: {
-      default: () => taskData
-    }
-  },
-  methods: actionsData
-});
+export const Default = Template.bind({});
+Default.args = {
+  task: {
+    id: "1",
+    title: "Test Task",
+    state: "Task_INBOX",
+    updated_at: new Date(2019, 0, 1, 9, 0)
+  }
+};
 // pinned task state
-export const Pinned = () => ({
-  components: { Task },
-  template: taskTemplate,
-  props: {
-    task: {
-      default: () => ({
-        ...taskData,
-        state: "TASK_PINNED"
-      })
-    }
-  },
-  methods: actionsData
-});
+export const Pinned = Template.bind({});
+Pinned.args = {
+  task: {
+    ...Default.args.task,
+    state: "TASK_PINNED"
+  }
+};
 // archived task state
-export const Archived = () => ({
-  components: { Task },
-  template: taskTemplate,
-  props: {
-    task: {
-      default: () => ({
-        ...taskData,
-        state: "TASK_ARCHIVED"
-      })
-    }
-  },
-  methods: actionsData
-});
+export const Archived = Template.bind({});
+Archived.args = {
+  ...Default.args.task,
+  state: "TASK_ARCHIVED"
+};
